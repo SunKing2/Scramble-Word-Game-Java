@@ -1,5 +1,5 @@
 # Scramble-Word-Game-Java
-This is a multiplay word game like Boggle.
+This is a multiplayer word game like Boggle.
 
 Each player connects using telnet 
 
