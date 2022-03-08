@@ -3,6 +3,10 @@ This is a multiplay word game like Boggle.
 
 Each player connects using telnet 
 
+Try the online live game right now at
+
+http://alwayswantedtoplay.com
+
 ## To Run
 git clone https://github.com/SunKing2/Scramble-Word-Game-Java.git
 
