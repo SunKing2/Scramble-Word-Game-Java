@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 public class ScrambleHelper {
 
     private static final int NUMBER_OF_LETTERS = 16;

@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -49,9 +50,10 @@ class ThreadedEchoHandler implements Runnable {
 
                 in = new Scanner(inStream);
                 PrintWriter out = new PrintWriter(outStream, true /* autoFlush */);
-                game.addPlayer(0, out, name);
+                game.addPlayer(0, name);
+                game.comm.addParticipant(out, name);
 
-                out.println("%Hello! Enter BYE to exit., you are " + name);
+                out.println("%Hello! Enter /exit to exit., you are " + name);
 
                 // echo client input
                 boolean done = false;
@@ -66,7 +68,7 @@ class ThreadedEchoHandler implements Runnable {
                     if (line.startsWith("/name ") && line.length() > 6) {
                         this.name = line.substring(6);
                     }
-                    if (line.trim().equals("BYE"))
+                    if (line.trim().equals("/exit"))
                         done = true;
                 }
             	in.close();  // remove me if any problems in this class

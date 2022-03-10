@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 import java.io.*;
 import java.util.*;
 
@@ -10,7 +11,8 @@ public class SoloCommandLineGame {
 		ScrambleController g = new ScrambleController(logger);
 		var out = new StringWriter();
 		var pw = new PrintWriter(out);
-		g.addPlayer(0, pw, nick);
+		g.addPlayer(0, nick);
+		g.comm.addParticipant(pw, nick);
 
 		
 	    System.out.println("$:");

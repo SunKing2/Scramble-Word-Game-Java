@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 public class ScrambleLogger 
 {
     public void println(String s)

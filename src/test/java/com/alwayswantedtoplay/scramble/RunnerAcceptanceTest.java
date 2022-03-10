@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.PrintWriter;
@@ -14,8 +15,8 @@ class RunnerAcceptanceTest {
 	private  String nick = "SunKing2";
 	
 	{
-	  ctr.addPlayer(0, pw, "SunKing2");
-	  pw = new PrintWriter(out);
+      ctr.comm.addParticipant(pw, nick);
+	  ctr.addPlayer(0, "SunKing2");
 	}
 
 	private void assertGuessesProduceOutput(String expected, String ... guesses) {

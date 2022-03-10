@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.PrintWriter;
@@ -27,15 +28,17 @@ class GamePlayTest {
 		ctr = new ScrambleController(logger);
 		out = new StringWriter();
 		pw = new PrintWriter(out);
-
-		ctr.addPlayer(0, pw, nick);
+		
+		ctr.comm.addParticipant(pw, nick);
+		ctr.addPlayer(0, nick);
 		ctr.startGame();
 	}
 
 	@Test
 	void testDifferentPlayerName() throws SimulationException {
 	    nick = "di";
-	    ctr.addPlayer(0, pw, nick);
+		ctr.comm.addParticipant(pw, nick);
+	    ctr.addPlayer(0, nick);
 	    ctr.processInput(nick, "eat");
 	    sExpected = " di: EAT=4, \n";
 	    sActual = ctr.showWords();		
@@ -55,7 +58,8 @@ class GamePlayTest {
 	void testSecondPlayer() throws SimulationException {
 	    var out2 = new StringWriter();
 	    var pw2 = new PrintWriter(out2);
-	    ctr.addPlayer(1, pw2, "di");
+		ctr.comm.addParticipant(pw2, "di");	    
+	    ctr.addPlayer(1, "di");
 	    ctr.processInput(nick, "eat");
 	    ctr.processInput("di", "sate");
 	    out.getBuffer().setLength(0);

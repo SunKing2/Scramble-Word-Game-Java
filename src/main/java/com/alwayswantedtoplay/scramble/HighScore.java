@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 public class HighScore {
     public int score;
     public String string;

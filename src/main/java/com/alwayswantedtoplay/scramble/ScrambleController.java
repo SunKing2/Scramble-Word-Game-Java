@@ -1,10 +1,10 @@
+package com.alwayswantedtoplay.scramble;
 import java.io.*;
 import java.util.*;
 
 public  class ScrambleController extends java.lang.Object
 {
     private boolean bGameOn;
-    private Hashtable<String, PrintWriter> hOutputs;
     private Hashtable<String, Integer> hScores;
     private Hashtable<String, String> hHighs;
     private Hashtable<String, String> hWords; // hWords words used by each person + score
@@ -26,13 +26,14 @@ public  class ScrambleController extends java.lang.Object
 	
 	private ScrambleLogger logger; //  = Globals.getLogger();
     private HighScores hs = new HighScores();
+    public Communicator comm = new Communicator();
+    private boolean bShowSender = true;
 
 	//private ScramPlayer player = new ScramPlayer();
 
     public ScrambleController(ScrambleLogger logger)
     {
 		this.logger = logger;
-        hOutputs = new Hashtable<>();
         if (hScores == null)
         {
             hScores = new Hashtable<>();
@@ -112,6 +113,12 @@ public  class ScrambleController extends java.lang.Object
             logger.println(ioe.toString() + "...cannot tell anyone of first game");
         }
     }
+    public void setShowSender(boolean b) {
+    	this.bShowSender = b;
+    }
+    public boolean getShowSender() {
+    	return bShowSender;
+    }
 
 	public String getGameName()
 	{
@@ -122,24 +129,23 @@ public  class ScrambleController extends java.lang.Object
     {
         tellAll("", getHumanLetters());
     }
-    public void addPlayer(int iPlayer, PrintWriter out, String sPlayer)
+    public void addPlayer(int iPlayer, String sPlayer)
     {
         try
         {
-            hOutputs.put(sPlayer, out);
             
             hScores.put(sPlayer, 0);
             hHighs.put(sPlayer, "");
             hWords.put(sPlayer, new String());
 
-            out.println(sOldScores);
+            tellOne(sPlayer, sOldScores);
 
-            tellAll(""," ** " + sPlayer + " just entered (" + hOutputs.size() + " players now) **");
+            tellAll(""," ** " + sPlayer + " just entered (" + hScores.size() + " players now) **");
 
             
             if (bGameOn)
             {
-                out.println(getHumanLetters());
+                tellOne(sPlayer, getHumanLetters());
             }
         }
         catch (Exception e)
@@ -156,7 +162,6 @@ public  class ScrambleController extends java.lang.Object
     {
         try
         {
-            hOutputs.remove(sPlayer);
             tellAll("", "%" + sPlayer + " has been removed from the game.");
 
 			hScores.remove(sPlayer);
@@ -171,56 +176,19 @@ public  class ScrambleController extends java.lang.Object
     }
 	public String tellOne(String sRecipient, String sMessage)
 	{
-	    String sReturn = "Private message to:[" + sRecipient + "] ";
-	    //System.out.println("private message to:[" + sRecipient + "], message:[" + sMessage + "]");
-        try
-        {
-            PrintWriter tOut = (PrintWriter)(hOutputs.get(sRecipient));
-            if ( tOut != null) 
-            {
-                tOut.println(sMessage); 
-                sReturn = sReturn + "sent.";
-            }
-            else 
-            {
-                sReturn = sReturn + "FAILED!!!";
-            }
-        }
-        catch (Exception e)
-        {
-            sReturn = sReturn + "FAILED!!!";
-        }
-        return sReturn;
+        return comm.tellOne("System", sRecipient, sMessage);
 	}
 	public void tellAllWithSquelch(String sSender, String sMessage)
 	{
-        try
-        {
-            for (Enumeration<String> e = hOutputs.keys() ; e.hasMoreElements() ;) 
-            {
-                String sTo = (String)e.nextElement();
-                if (hSquelch.get(sTo) != null && ((String)hSquelch.get(sTo)).equals(sSender))
-                {
-                }
-                else
-                ((PrintWriter)hOutputs.get(sTo)).println(sMessage); 
-            }
-        }
-        catch (Exception e)
-        {
-            logger.println("tellAllWithSquelch  FAILED!!!");
-        }
+		String sNewMessage = "" + sMessage;
+		if (bShowSender) {
+			sNewMessage = sSender + "> " + sMessage;
+		}
+		comm.tellAllWithSquelch(sSender, sNewMessage, hSquelch);
 	}
 
     private void tellAll(String nameFrom, String sMessage) {
-        for (String key : hOutputs.keySet()) {
-            PrintWriter out = hOutputs.get(key);
-            if (!nameFrom.equals(key)) {
-                String sPrefix = nameFrom + "> ";
-                if (nameFrom.length() == 0) {sPrefix = "";}
-                out.println(sPrefix + sMessage);
-            }
-        }
+    	comm.tellAll(nameFrom, sMessage);
     }
     public void processInput(String nick, String sInput) throws SimulationException
     {
@@ -247,10 +215,7 @@ public  class ScrambleController extends java.lang.Object
                     hHighs.remove(nick);
                     hWords.remove(nick);
 
-                    // send output to new nick
-                    hOutputs.put(sNewNick, hOutputs.get(nick));
-                    hOutputs.remove(nick);
-
+                    comm.renameParticipant(nick, sNewNick);
 
                     tellAll("", " " + nick + " is now " + sNewNick + ".");
                     logger.println(nick + " is now " + sNewNick);
@@ -391,9 +356,9 @@ public  class ScrambleController extends java.lang.Object
             {
                 // add player's name to list of players who rd
                 // if everyone rd'd, start the game
-                tellAllWithSquelch(nick, nick + "> " + sInput);
+                tellAllWithSquelch(nick, sInput);
                 hRd.put(nick, "rd");
-                if (hRd.size() == hOutputs.size())
+                if (hRd.size() == hScores.size())
                 {
                     //logger.println("final rd typed by: " + player.getNick());
                     startGame();
@@ -463,7 +428,7 @@ public  class ScrambleController extends java.lang.Object
             }
             else
             {
-                tellAllWithSquelch(nick, nick + "> " + sInput);
+                tellAllWithSquelch(nick, sInput);
             }
             //return ("");
     }

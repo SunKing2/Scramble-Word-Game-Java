@@ -1,3 +1,4 @@
+package com.alwayswantedtoplay.scramble;
 
 public class SimulationException extends java.lang.Exception
 {
