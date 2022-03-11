@@ -25,11 +25,12 @@ class GamePlayTest {
 
 	@BeforeEach
 	void setUp() throws Exception {
-		ctr = new ScrambleController(logger);
+		Communicator comm = new PrintWriterCommunicator();
+		ctr = new ScrambleController(comm, logger);
 		out = new StringWriter();
 		pw = new PrintWriter(out);
 		
-		ctr.comm.addParticipant(pw, nick);
+		ctr.comm.addParticipant(nick, pw);
 		ctr.addPlayer(0, nick);
 		ctr.startGame();
 	}
@@ -37,7 +38,7 @@ class GamePlayTest {
 	@Test
 	void testDifferentPlayerName() throws SimulationException {
 	    nick = "di";
-		ctr.comm.addParticipant(pw, nick);
+		ctr.comm.addParticipant(nick, pw);
 	    ctr.addPlayer(0, nick);
 	    ctr.processInput(nick, "eat");
 	    sExpected = " di: EAT=4, \n";
@@ -58,7 +59,7 @@ class GamePlayTest {
 	void testSecondPlayer() throws SimulationException {
 	    var out2 = new StringWriter();
 	    var pw2 = new PrintWriter(out2);
-		ctr.comm.addParticipant(pw2, "di");	    
+		ctr.comm.addParticipant("di", pw2);	    
 	    ctr.addPlayer(1, "di");
 	    ctr.processInput(nick, "eat");
 	    ctr.processInput("di", "sate");

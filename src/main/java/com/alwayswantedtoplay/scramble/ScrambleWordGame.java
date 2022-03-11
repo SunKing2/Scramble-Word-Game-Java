@@ -7,7 +7,8 @@ public class ScrambleWordGame {
 
     public static void main(String[] args) {
         ScrambleLogger logger = new ScrambleLogger();
-        ScrambleController game = new ScrambleController(logger);
+        Communicator comm = new PrintWriterCommunicator();
+        ScrambleController game = new ScrambleController(comm, logger);
         ServerSocket s;
         try {
             int i = 1;
@@ -51,7 +52,7 @@ class ThreadedEchoHandler implements Runnable {
                 in = new Scanner(inStream);
                 PrintWriter out = new PrintWriter(outStream, true /* autoFlush */);
                 game.addPlayer(0, name);
-                game.comm.addParticipant(out, name);
+                game.comm.addParticipant(name, out);
 
                 out.println("%Hello! Enter /exit to exit., you are " + name);
 

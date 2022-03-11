@@ -17,7 +17,7 @@ public  class ScrambleController extends java.lang.Object
 	private int iLongestWord;
 	private String sLongestWord;
 	private String sLongestPlayer;
-	private Hashtable<String, String> hSquelch = new Hashtable<>();
+	private HashMap<String, String> hSquelch = new HashMap<>();
 	private int iGhostCount = 0;
 	private Hashtable<String, Integer> hGhost = new Hashtable<>();
 	private String sOldScores = ""; 
@@ -26,14 +26,15 @@ public  class ScrambleController extends java.lang.Object
 	
 	private ScrambleLogger logger; //  = Globals.getLogger();
     private HighScores hs = new HighScores();
-    public Communicator comm = new Communicator();
+    public Communicator comm; // = new PrintWriterCommunicator();
     private boolean bShowSender = true;
 
 	//private ScramPlayer player = new ScramPlayer();
 
-    public ScrambleController(ScrambleLogger logger)
+    public ScrambleController(Communicator comm, ScrambleLogger logger)
     {
 		this.logger = logger;
+		this.comm = comm;
         if (hScores == null)
         {
             hScores = new Hashtable<>();

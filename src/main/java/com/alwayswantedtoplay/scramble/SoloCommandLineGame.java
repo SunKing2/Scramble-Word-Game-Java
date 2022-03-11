@@ -8,11 +8,12 @@ public class SoloCommandLineGame {
 
 		String nick = "SunKing2";
 		ScrambleLogger logger = new ScrambleLogger();
-		ScrambleController g = new ScrambleController(logger);
+		Communicator comm = new PrintWriterCommunicator();
+		ScrambleController g = new ScrambleController(comm, logger);
 		var out = new StringWriter();
 		var pw = new PrintWriter(out);
 		g.addPlayer(0, nick);
-		g.comm.addParticipant(pw, nick);
+		g.comm.addParticipant(nick, pw);
 
 		
 	    System.out.println("$:");

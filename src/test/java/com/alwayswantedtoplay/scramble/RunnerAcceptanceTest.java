@@ -9,13 +9,14 @@ import org.junit.jupiter.api.Test;
 class RunnerAcceptanceTest {
 
 	private ScrambleLogger logger = new ScrambleLogger();
-	private ScrambleController ctr = new ScrambleController(logger);
+	private Communicator comm = new PrintWriterCommunicator();
+	private ScrambleController ctr = new ScrambleController(comm, logger);
 	private  StringWriter out = new StringWriter();
 	private  PrintWriter pw = new PrintWriter(out);
 	private  String nick = "SunKing2";
 	
 	{
-      ctr.comm.addParticipant(pw, nick);
+      ctr.comm.addParticipant(nick, pw);
 	  ctr.addPlayer(0, "SunKing2");
 	}
 
