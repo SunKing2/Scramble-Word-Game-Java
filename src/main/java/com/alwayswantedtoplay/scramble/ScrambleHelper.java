@@ -39,7 +39,6 @@ public class ScrambleHelper {
     }
     public static int myRandom(int i) {
         int iReturn =  (int) Math.ceil(Math.random()*i);
-        iReturn = 0;
         return iReturn;
     }
 

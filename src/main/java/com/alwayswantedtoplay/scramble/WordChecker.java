@@ -30,7 +30,6 @@ public class WordChecker {
 		return dict.contains(sString);
 	}
 	
-	//TODO contains compile, move it to top of class
 	private static List<Character> StringAsList(String test) {
 		return reEmpty.splitAsStream(test)
 			    .map(i -> i.charAt(0))
@@ -114,16 +113,5 @@ public class WordChecker {
         }
         return iScore;
     }
-
-
-	public static int myRandom(int i) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	public static void readDictionary(ScrambleLogger logger) {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

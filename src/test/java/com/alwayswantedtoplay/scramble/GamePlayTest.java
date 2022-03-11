@@ -27,6 +27,7 @@ class GamePlayTest {
 	void setUp() throws Exception {
 		Communicator comm = new PrintWriterCommunicator();
 		ctr = new ScrambleController(comm, logger);
+		ctr.bRandomMode = false;
 		out = new StringWriter();
 		pw = new PrintWriter(out);
 		
@@ -66,6 +67,24 @@ class GamePlayTest {
 	    out.getBuffer().setLength(0);
 	    ctr.processInput(nick, "w");
 	    sExpected = "  Words used:\n di: SATE=6, \n SunKing2: EAT=4, \n";
+	    sActual = out.toString();		
+		assertEquals(sExpected, sActual);
+	}
+	@Test
+	void testLeaderBoardTwoPlayers() throws SimulationException {
+	    var out2 = new StringWriter();
+	    var pw2 = new PrintWriter(out2);
+		ctr.comm.addParticipant("di", pw2);	    
+	    ctr.addPlayer(1, "di");
+	    ctr.processInput(nick, "eat");
+	    ctr.processInput("di", "sate");
+	    ctr.endGame();
+	    out.getBuffer().setLength(0);
+	    ctr.processInput(nick, "/hi");
+	    sExpected = "  High Scores:\n"
+	    		+ "   di           :    6 (*SATE for 6 points!)\n"
+	    		+ "   SunKing2     :    4\n"
+	    		+ "\n";
 	    sActual = out.toString();		
 		assertEquals(sExpected, sActual);
 	}

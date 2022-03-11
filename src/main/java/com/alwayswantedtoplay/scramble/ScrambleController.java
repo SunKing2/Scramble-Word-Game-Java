@@ -28,6 +28,7 @@ public  class ScrambleController extends java.lang.Object
     private HighScores hs = new HighScores();
     public Communicator comm; // = new PrintWriterCommunicator();
     private boolean bShowSender = true;
+    boolean bRandomMode = true;
 
 	//private ScramPlayer player = new ScramPlayer();
 
@@ -43,8 +44,8 @@ public  class ScrambleController extends java.lang.Object
             hWordOwners = new Hashtable<>();
         }
         
-        // uncommented these 3 february 15
-        WordChecker.readDictionary(logger);
+        // uncommented these 3 lines on  february 15
+        //WordChecker.readDictionary(logger);
         //logger.println("WordGameServerInterface() calling readDictionary");
         //startGame();
     }
@@ -439,7 +440,10 @@ public  class ScrambleController extends java.lang.Object
     }
     public String getHumanLetters()
     {
-	  int iPosition = ScrambleHelper.myRandom(16);
+    	int iPosition = 0;
+    	if (bRandomMode) {
+    		iPosition = ScrambleHelper.myRandom(16);
+    	}
         String s2 = " The letters are:\n    ";
         for (int i = 0; i < 16; i++)
         {
@@ -463,7 +467,9 @@ public  class ScrambleController extends java.lang.Object
     }
     public String setLetters()
     {
-        //sLetters = ScrambleHelper.makeLetters();
+        if (bRandomMode) {
+        	sLetters = ScrambleHelper.makeLetters();
+        }
         return sLetters;
     }
     public String showWords()
@@ -661,6 +667,8 @@ public  class ScrambleController extends java.lang.Object
 				    }
 				
 				}
+
+				hs.add(isc, buf.toString());
 				
 			    if (i < max) 
 				{
@@ -668,7 +676,6 @@ public  class ScrambleController extends java.lang.Object
 				}
 			}
             xbuf.append(buf);
-            hs.add(isc, buf.toString());
 		}
 		xbuf.append("");
 		return xbuf.toString();

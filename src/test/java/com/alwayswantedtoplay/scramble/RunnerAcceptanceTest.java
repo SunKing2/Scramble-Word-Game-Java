@@ -18,6 +18,7 @@ class RunnerAcceptanceTest {
 	{
       ctr.comm.addParticipant(nick, pw);
 	  ctr.addPlayer(0, "SunKing2");
+	  ctr.bRandomMode = false;
 	}
 
 	private void assertGuessesProduceOutput(String expected, String ... guesses) {
